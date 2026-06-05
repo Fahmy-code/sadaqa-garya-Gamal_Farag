@@ -282,73 +282,65 @@
     transition: background 0.2s;
   }
   .share-btn:hover { background: rgba(255,255,255,0.18); }
-  * { box-sizing: border-box; }
 
-body {
-  font-family: 'Cairo', sans-serif;
-  direction: rtl;
-  margin: 0;
-  padding: 0;
+
+
+
+
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+
+  .cards-grid {
+     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+  h1{
+    font-size: 22px;
+    line-height: 1.5;
+  }
+
+  .subtitle{
+    font-size: 13px;
+  }
+
+  .photo-ring,
+  .photo-ring img,
+  .photo-placeholder{
+    width: 130px;
+    height: 130px;
+  }
+
+  .card-count{
+    font-size: 24px;
+  }
+
+  .btn-arabic{
+    font-size: 18px;
+  }
+
+  .links-row{
+    flex-direction: column;
+  }
+
+  .quran-link{
+    width: 100%;
+  }
+
+  .dua-text{
+    font-size: 15px;
+  }
+
+  .ayah-banner{
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .memorial-wrap{
+    padding: 15px 10px;
+  }
+
 }
-
-.memorial-wrap {
-  padding: 1rem;
-  min-height: 100vh;
-}
-
-.photo-ring {
-  width: 120px;
-  height: 120px;
-}
-
-.photo-ring img,
-.photo-placeholder {
-  width: 120px;
-  height: 120px;
-}
-
-h1 {
-  font-size: clamp(16px, 4vw, 26px);
-  line-height: 1.5;
-  padding: 0 10px;
-}
-
-.cards-grid {
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 0 4px;
-}
-
-.action-card {
-  padding: 1rem 0.75rem;
-}
-
-.card-count {
-  font-size: clamp(20px, 6vw, 28px);
-}
-
-.istighfar-btn {
-  padding: 1rem;
-}
-
-.btn-arabic {
-  font-size: clamp(16px, 5vw, 22px);
-}
-
-.links-row {
-  gap: 6px;
-}
-
-.quran-link {
-  font-size: 12px;
-  padding: 0.7rem 0.5rem;
-  min-width: 90px;
-}
-
-.dua-text {
-  font-size: clamp(13px, 3.5vw, 17px);
-}
-
 </style>
 
 <div class="memorial-wrap" id="wrap">
