@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>صدقة جارية على روح جمال فرج</title>
+<link rel="icon" type="image/png" href="favicon.png">
 
+<!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getDatabase, ref, onValue, runTransaction, increment, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -80,36 +82,84 @@
     padding: 0;
   }
 
+  /* تم تعديل الخلفية لتصبح متحركة ومموجة بشكل لايف وهادئ */
   .memorial-wrap {
     font-family: 'Cairo', sans-serif;
     direction: rtl;
     text-align: center;
-    background: linear-gradient(160deg, #1a472a 0%, #2d6a4f 40%, #1b4332 100%);
+    background: linear-gradient(160deg, #0f2d1a 0%, #1a472a 40%, #2d6a4f 70%, #1b4332 100%);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
     min-height: 100vh;
     padding: 2rem 1rem;
     position: relative;
     overflow: hidden;
   }
 
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* تأثير الهلال المضيء والمتحرك في الخلفية */
+  .crescent-moon {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    font-size: 55px;
+    color: rgba(255, 254, 212, 0.85);
+    text-shadow: 0 0 25px rgba(255, 254, 212, 0.6), 0 0 45px rgba(168, 245, 194, 0.4);
+    pointer-events: none;
+    z-index: 1;
+    animation: floatMoon 6s ease-in-out infinite alternate;
+  }
+
+  @keyframes floatMoon {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+    100% { transform: translateY(-10px) rotate(-5deg); opacity: 0.95; }
+  }
+
   .stars {
     position: absolute; inset: 0; pointer-events: none;
     overflow: hidden;
+    z-index: 0;
   }
+
+  /* النجوم العادية بتأثير الوميض */
   .star {
     position: absolute;
-    width: 3px; height: 3px;
-    background: rgba(255,255,255,0.4);
+    width: 2px; height: 2px;
+    background: rgba(255,255,255,0.6);
     border-radius: 50%;
-    animation: twinkle 3s infinite alternate;
+    animation: twinkle 4s infinite alternate;
   }
 
   @keyframes twinkle {
-    0% { opacity: 0.2; } 100% { opacity: 0.9; }
+    0% { opacity: 0.1; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* النجوم المتحركة (الشهب المتساقطة ببطء) */
+  .shooting-star {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(-45deg, rgba(255,255,255,1), rgba(255,255,255,0));
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.8));
+    animation: shooting 8s linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes shooting {
+    0% { transform: translateX(0) translateY(0) rotate(-45deg) scale(0); opacity: 0; }
+    10% { opacity: 0.8; }
+    30% { transform: translateX(-150px) translateY(150px) rotate(-45deg) scale(1); opacity: 0; }
+    100% { transform: translateX(-150px) translateY(150px) rotate(-45deg) scale(0); opacity: 0; }
   }
 
   .ayah-banner {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 12px;
     padding: 0.75rem 1.25rem;
     margin: 0 auto 1.5rem;
@@ -119,14 +169,17 @@
     color: rgba(255,255,255,0.9);
     line-height: 1.8;
     display: block;
+    backdrop-filter: blur(4px);
+    position: relative;
+    z-index: 2;
   }
 
-  /* تم إصلاح وتثبيت كود منطقة الصورة */
   .photo-ring {
     position: relative;
     width: 160px; height: 160px;
     margin: 0 auto 1.25rem;
     display: block;
+    z-index: 2;
   }
   .photo-ring::before {
     content: '';
@@ -160,17 +213,21 @@
     margin: 0 auto 0.4rem;
     max-width: 580px;
     text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    position: relative;
+    z-index: 2;
   }
 
   .subtitle {
     font-size: 14px;
     color: rgba(255,255,255,0.65);
     margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 2;
   }
 
   .visitors-banner {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 12px;
     padding: 0.65rem 1.25rem;
     max-width: 580px;
@@ -179,6 +236,9 @@
     color: rgba(255,255,255,0.75);
     direction: rtl;
     display: block;
+    backdrop-filter: blur(4px);
+    position: relative;
+    z-index: 2;
   }
   .visitors-banner strong {
     color: #a8f5c2;
@@ -191,19 +251,22 @@
     gap: 12px;
     max-width: 580px;
     margin: 0 auto 1.5rem;
+    position: relative;
+    z-index: 2;
   }
 
   .action-card {
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 14px;
     padding: 1.25rem 1rem;
     cursor: pointer;
     transition: background 0.2s, transform 0.15s;
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(4px);
   }
-  .action-card:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
+  .action-card:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
   .action-card:active { transform: scale(0.97); }
 
   .action-card.full-width { grid-column: 1 / -1; }
@@ -257,12 +320,14 @@
     margin: 0 auto 1.5rem;
     flex-wrap: wrap;
     justify-content: center;
+    position: relative;
+    z-index: 2;
   }
 
   .quran-link {
     flex: 1; min-width: 130px;
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
     border-radius: 12px;
     padding: 0.85rem 1rem;
     text-decoration: none;
@@ -271,16 +336,20 @@
     font-weight: 500;
     transition: background 0.2s;
     display: flex; align-items: center; justify-content: center; gap: 6px;
+    backdrop-filter: blur(4px);
   }
-  .quran-link:hover { background: rgba(255,255,255,0.16); }
+  .quran-link:hover { background: rgba(255,255,255,0.14); }
 
   .dua-section {
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
     border-radius: 14px;
     padding: 1.25rem;
     max-width: 580px;
     margin: 0 auto 1.5rem;
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(4px);
   }
 
   .dua-text {
@@ -305,37 +374,48 @@
   .copy-dua:hover { background: rgba(255,255,255,0.1); }
 
   .total-banner {
-    background: rgba(168,245,194,0.12);
-    border: 1px solid rgba(168,245,194,0.3);
+    background: rgba(168,245,194,0.1);
+    border: 1px solid rgba(168,245,194,0.2);
     border-radius: 12px;
     padding: 0.85rem;
     max-width: 580px;
     margin: 0 auto 1rem;
     font-size: 14px;
     color: rgba(255,255,255,0.7);
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(4px);
   }
   .total-banner strong { color: #a8f5c2; font-size: 18px; }
 
   .reset-btn {
     background: transparent;
     border: none;
-    color: rgba(255,255,255,0.3);
+    color: rgba(255,255,255,0.25);
     font-family: 'Cairo', sans-serif;
     font-size: 12px;
     cursor: pointer;
     margin-top: 1rem;
+    position: relative;
+    z-index: 2;
   }
-  .reset-btn:hover { color: rgba(255,255,255,0.6); }
+  .reset-btn:hover { color: rgba(255,255,255,0.5); }
 
   /* Responsive adjustments */
   @media (max-width: 768px) {
+    .crescent-moon {
+      top: 15px;
+      left: 15px;
+      font-size: 38px; /* تصغير الهلال على الموبايل لكي لا يغطي محتوى الصفحة */
+    }
+
     .cards-grid {
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
 
     h1{
-      font-size: 22px;
+      font-size: 20px;
       line-height: 1.5;
     }
 
@@ -379,6 +459,10 @@
 </head>
 <body>
 <div class="memorial-wrap" id="wrap">
+  <!-- تأثير الهلال المضيء -->
+  <div class="crescent-moon">🌙</div>
+  
+  <!-- الحاوية الخاصة بالنجوم المتحركة واللايف -->
   <div class="stars" id="stars"></div>
 
   <div class="ayah-banner">
@@ -461,7 +545,6 @@
     ring.classList.add('go');
   }
 
-  // تم تعديل دالة نسخ الدعاء لتعمل على الموبايل بكفاءة
   function copyDua() {
     const text = 'اللهم اغفر له وارحمه وعافه واعف عنه، وأكرم نزله ووسع مدخله، واغسله بالماء والثلج والبرد';
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -489,17 +572,32 @@
     }
   }
 
+  // تطوير جافا سكريبت النجوم لتشمل النجوم الثابتة والنجوم المتحركة الـ Live
   function makeStars() {
     const c = document.getElementById('stars');
     if(!c) return;
-    for (let i = 0; i < 40; i++) {
+    
+    // 1. توليد النجوم اللامعة الثابتة
+    for (let i = 0; i < 45; i++) {
       const s = document.createElement('div');
       s.className = 'star';
       s.style.top = Math.random() * 100 + '%';
       s.style.left = Math.random() * 100 + '%';
-      s.style.animationDelay = Math.random() * 3 + 's';
-      s.style.animationDuration = (2 + Math.random() * 3) + 's';
+      s.style.animationDelay = Math.random() * 4 + 's';
+      s.style.animationDuration = (2 + Math.random() * 4) + 's';
       c.appendChild(s);
+    }
+
+    // 2. توليد النجوم المتحركة المتساقطة ببطء (الشهب الهادئة)
+    for (let i = 0; i < 6; i++) {
+      const sh = document.createElement('div');
+      sh.className = 'shooting-star';
+      sh.style.top = Math.random() * 40 + '%';
+      sh.style.left = (60 + Math.random() * 40) + '%';
+      sh.style.width = (40 + Math.random() * 50) + 'px';
+      sh.style.animationDelay = (Math.random() * 8) + 's';
+      sh.style.animationDuration = (6 + Math.random() * 6) + 's';
+      c.appendChild(sh);
     }
   }
 
