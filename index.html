@@ -1,0 +1,413 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .memorial-wrap {
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+    text-align: center;
+    background: linear-gradient(160deg, #1a472a 0%, #2d6a4f 40%, #1b4332 100%);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stars {
+    position: absolute; inset: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .star {
+    position: absolute;
+    width: 3px; height: 3px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    animation: twinkle 3s infinite alternate;
+  }
+
+  @keyframes twinkle {
+    0% { opacity: 0.2; } 100% { opacity: 0.9; }
+  }
+
+  .ayah-banner {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    margin: 0 auto 1.5rem;
+    max-width: 580px;
+    font-family: 'Amiri', serif;
+    font-size: 15px;
+    color: rgba(255,255,255,0.85);
+    line-height: 1.8;
+  }
+
+  .photo-ring {
+    position: relative;
+    width: 160px; height: 160px;
+    margin: 0 auto 1.25rem;
+  }
+  .photo-ring::before {
+    content: '';
+    position: absolute; inset: -6px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+    animation: spin 12s linear infinite;
+  }
+  .photo-ring::after {
+    content: '';
+    position: absolute; inset: -12px;
+    border-radius: 50%;
+    border: 1px dashed rgba(255,255,255,0.15);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .photo-ring img {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .photo-placeholder {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    border: 4px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 48px;
+  }
+
+  h1 {
+    font-family: 'Amiri', serif;
+    font-size: 26px;
+    color: #fff;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 1.5rem;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 580px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .action-card {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 14px;
+    padding: 1.25rem 1rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .action-card:hover { background: rgba(255,255,255,0.18); transform: translateY(-2px); }
+  .action-card:active { transform: scale(0.97); }
+
+  .action-card.full-width { grid-column: 1 / -1; }
+
+  .card-icon {
+    font-size: 28px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .card-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .card-count {
+    font-size: 28px;
+    font-weight: 700;
+    color: #a8f5c2;
+    display: block;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .card-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .pulse-ring {
+    position: absolute;
+    inset: 0; border-radius: 14px;
+    border: 2px solid #a8f5c2;
+    opacity: 0;
+    animation: none;
+  }
+  .pulse-ring.go {
+    animation: pulse-out 0.5s ease-out forwards;
+  }
+  @keyframes pulse-out {
+    0% { opacity: 0.8; transform: scale(0.95); }
+    100% { opacity: 0; transform: scale(1.05); }
+  }
+
+  .istighfar-btn {
+    background: rgba(168,245,194,0.15);
+    border: 1.5px solid rgba(168,245,194,0.5);
+    border-radius: 14px;
+    padding: 1.25rem;
+    cursor: pointer;
+    width: 100%;
+    max-width: 580px;
+    margin: 0 auto 12px;
+    display: block;
+    transition: background 0.2s, transform 0.12s;
+    position: relative; overflow: hidden;
+  }
+  .istighfar-btn:hover { background: rgba(168,245,194,0.25); }
+  .istighfar-btn:active { transform: scale(0.98); }
+
+  .btn-arabic {
+    font-family: 'Amiri', serif;
+    font-size: 22px;
+    color: #a8f5c2;
+    display: block;
+    line-height: 1.5;
+  }
+  .btn-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .links-row {
+    display: flex;
+    gap: 10px;
+    max-width: 580px;
+    margin: 0 auto 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .quran-link {
+    flex: 1; min-width: 130px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .quran-link:hover { background: rgba(255,255,255,0.16); }
+
+  .dua-section {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 1.25rem;
+    max-width: 580px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .dua-text {
+    font-family: 'Amiri', serif;
+    font-size: 17px;
+    color: rgba(255,255,255,0.9);
+    line-height: 2;
+    margin-bottom: 0.75rem;
+  }
+
+  .copy-dua {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px;
+    padding: 6px 16px;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Cairo', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .copy-dua:hover { background: rgba(255,255,255,0.1); }
+
+  .total-banner {
+    background: rgba(168,245,194,0.12);
+    border: 1px solid rgba(168,245,194,0.3);
+    border-radius: 12px;
+    padding: 0.85rem;
+    max-width: 580px;
+    margin: 0 auto 1rem;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+  }
+  .total-banner strong { color: #a8f5c2; font-size: 18px; }
+
+  .reset-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Cairo', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  .reset-btn:hover { color: rgba(255,255,255,0.6); }
+
+  .share-btn {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 0.7rem 1.5rem;
+    color: #fff;
+    font-family: 'Cairo', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 0.5rem;
+    transition: background 0.2s;
+  }
+  .share-btn:hover { background: rgba(255,255,255,0.18); }
+</style>
+
+<div class="memorial-wrap" id="wrap">
+  <div class="stars" id="stars"></div>
+
+  <div class="ayah-banner">
+    ﴿ وَالَّذِينَ جَاءُوا مِن بَعْدِهِمْ يَقُولُونَ رَبَّنَا اغْفِرْ لَنَا وَلِإِخْوَانِنَا ﴾
+  </div>
+
+  <div class="photo-ring">
+    <img src="GamalFarag.jpg" alt="صورة [جمال فرج]">
+  </div>
+
+  <h1>صدقه جاريه علي روح جمال فرج احمد حسن </h1>
+  <p class="subtitle">رحمه الله وأسكنه فسيح جناته</p>
+
+  <div class="cards-grid">
+    <div class="action-card" id="istighfar-card" onclick="addCount('istighfar')">
+      <div class="pulse-ring" id="ring-istighfar"></div>
+      <span class="card-icon">🤲</span>
+      <span class="card-label">الاستغفار</span>
+      <span class="card-count" id="istighfar-count">0</span>
+      <span class="card-sub">مرة</span>
+    </div>
+    <div class="action-card" id="salawat-card" onclick="addCount('salawat')">
+      <div class="pulse-ring" id="ring-salawat"></div>
+      <span class="card-icon">💚</span>
+      <span class="card-label">الصلاة على النبي</span>
+      <span class="card-count" id="salawat-count">0</span>
+      <span class="card-sub">مرة</span>
+    </div>
+    <div class="action-card" id="tahlil-card" onclick="addCount('tahlil')">
+      <div class="pulse-ring" id="ring-tahlil"></div>
+      <span class="card-icon">☪️</span>
+      <span class="card-label">التهليل</span>
+      <span class="card-count" id="tahlil-count">0</span>
+      <span class="card-sub">مرة</span>
+    </div>
+    <div class="action-card" id="tasbih-card" onclick="addCount('tasbih')">
+      <div class="pulse-ring" id="ring-tasbih"></div>
+      <span class="card-icon">📿</span>
+      <span class="card-label">التسبيح</span>
+      <span class="card-count" id="tasbih-count">0</span>
+      <span class="card-sub">مرة</span>
+    </div>
+  </div>
+
+  <div class="total-banner">
+    مجموع الأذكار: <strong id="total-count">0</strong> مرة — جعلها الله في ميزان حسناته
+  </div>
+
+  <div class="dua-section">
+    <p class="dua-text">اللَّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ،<br>وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مُدْخَلَهُ،<br>وَاغْسِلْهُ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ</p>
+    <button class="copy-dua" onclick="copyDua()">📋 نسخ الدعاء</button>
+  </div>
+
+  <div class="links-row">
+    <a class="quran-link" href="https://quran.com/36" target="_blank">📖 سورة يس</a>
+    <a class="quran-link" href="https://quran.com/67" target="_blank">📖 سورة الملك</a>
+    <a class="quran-link" href="https://quran.com/2/255" target="_blank">📖 آية الكرسي</a>
+  </div>
+
+  <button class="reset-btn" onclick="resetAll()">إعادة تعيين العداد</button>
+</div>
+
+<script>
+  const keys = ['istighfar','salawat','tahlil','tasbih'];
+  const counts = {};
+
+  function load() {
+    keys.forEach(k => {
+      const val = parseInt(localStorage.getItem('memorial_' + k) || '0');
+      counts[k] = val;
+      document.getElementById(k + '-count').textContent = val.toLocaleString('ar-EG');
+    });
+    updateTotal();
+  }
+
+  function addCount(key) {
+    counts[key] = (counts[key] || 0) + 1;
+    localStorage.setItem('memorial_' + key, counts[key]);
+    document.getElementById(key + '-count').textContent = counts[key].toLocaleString('ar-EG');
+    updateTotal();
+    triggerPulse(key);
+  }
+
+  function triggerPulse(key) {
+    const ring = document.getElementById('ring-' + key);
+    ring.classList.remove('go');
+    void ring.offsetWidth;
+    ring.classList.add('go');
+  }
+
+  function updateTotal() {
+    const t = keys.reduce((s,k) => s + (counts[k]||0), 0);
+    document.getElementById('total-count').textContent = t.toLocaleString('ar-EG');
+  }
+
+  function copyDua() {
+    const text = 'اللهم اغفر له وارحمه وعافه واعف عنه، وأكرم نزله ووسع مدخله، واغسله بالماء والثلج والبرد';
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-dua');
+      btn.textContent = '✅ تم النسخ';
+      setTimeout(() => btn.textContent = '📋 نسخ الدعاء', 2000);
+    });
+  }
+
+  function resetAll() {
+    if (!confirm('هل تريد إعادة تعيين جميع العدادات؟')) return;
+    keys.forEach(k => { counts[k] = 0; localStorage.setItem('memorial_' + k, 0); document.getElementById(k + '-count').textContent = '0'; });
+    updateTotal();
+  }
+
+  function makeStars() {
+    const c = document.getElementById('stars');
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.animationDelay = Math.random() * 3 + 's';
+      s.style.animationDuration = (2 + Math.random() * 3) + 's';
+      c.appendChild(s);
+    }
+  }
+
+  makeStars();
+  load();
+</script>
