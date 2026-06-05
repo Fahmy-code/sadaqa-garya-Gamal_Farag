@@ -1,5 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صدقة جارية على روح جمال فرج</title>
+
+<!-- Firebase -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, onValue, runTransaction, increment, set, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  // 🔴 ضع هنا إعدادات Firebase بتاعتك
+  const firebaseConfig = {
+    apiKey: "AIzaSyCR7Z2rP1M625UWPvOrL8TNht78CHYYFQE",
+    authDomain: "myproject-bdbe4.firebaseapp.com",
+    databaseURL: "https://myproject-bdbe4-default-rtdb.firebaseio.com",
+    projectId: "myproject-bdbe4",
+    storageBucket: "myproject-bdbe4.firebasestorage.app",
+    messagingSenderId: "124248974195",
+    appId: "1:124248974195:web:d08cdea133121205df5b06"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // ── عداد الزوار ──────────────────────────────────
+  const visitedKey = 'memorial_visited_v1';
+  if (!sessionStorage.getItem(visitedKey)) {
+    sessionStorage.setItem(visitedKey, '1');
+    runTransaction(ref(db, 'counters/visitors'), (cur) => (cur || 0) + 1);
+  }
+
+  // ── الاستماع للتغييرات الحية ──────────────────────
+  const countersRef = ref(db, 'counters');
+  onValue(countersRef, (snap) => {
+    const data = snap.val() || {};
+    const fields = {
+      visitors:  { id: 'visitors-count',  fmt: true },
+      fatiha:    { id: 'fatiha-count',    fmt: true },
+      istighfar: { id: 'istighfar-count', fmt: true },
+      salawat:   { id: 'salawat-count',   fmt: true },
+      tahlil:    { id: 'tahlil-count',    fmt: true },
+      tasbih:    { id: 'tasbih-count',    fmt: true },
+    };
+    Object.entries(fields).forEach(([key, {id}]) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = (data[key] || 0).toLocaleString('ar-EG');
+    });
+    // مجموع الأذكار
+    const total = ['fatiha','istighfar','salawat','tahlil','tasbih']
+      .reduce((s,k) => s + (data[k]||0), 0);
+    const totalEl = document.getElementById('total-count');
+    if (totalEl) totalEl.textContent = total.toLocaleString('ar-EG');
+  });
+
+  // ── دالة الإضافة (متاحة عالمياً) ─────────────────
+  window.addCountFB = function(key) {
+    runTransaction(ref(db, 'counters/' + key), (cur) => (cur || 0) + 1);
+    triggerPulse(key);
+  };
+
+  window.resetAllFB = function() {
+    if (!confirm('هل تريد إعادة تعيين جميع العدادات؟')) return;
+    const keys = ['fatiha','istighfar','salawat','tahlil','tasbih'];
+    const updates = {};
+    keys.forEach(k => updates['counters/' + k] = 0);
+    import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")
+      .then(({update}) => update(ref(db), updates));
+  };
+</script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;500;600&display=swap');
 
@@ -247,6 +316,22 @@
   }
   .copy-dua:hover { background: rgba(255,255,255,0.1); }
 
+  .visitors-banner {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 0.65rem 1.25rem;
+    max-width: 580px;
+    margin: 0 auto 1rem;
+    font-size: 15px;
+    color: rgba(255,255,255,0.75);
+    direction: rtl;
+  }
+  .visitors-banner strong {
+    color: #a8f5c2;
+    font-size: 17px;
+  }
+
   .total-banner {
     background: rgba(168,245,194,0.12);
     border: 1px solid rgba(168,245,194,0.3);
@@ -345,7 +430,8 @@
 
 }
 </style>
-
+</head>
+<body>
 <div class="memorial-wrap" id="wrap">
   <div class="stars" id="stars"></div>
 
@@ -360,33 +446,46 @@
   <h1>صدقه جاريه علي روح جمال فرج احمد حسن </h1>
   <p class="subtitle">رحمه الله وأسكنه فسيح جناته</p>
 
+  <!-- بانر الزوار -->
+  <div class="visitors-banner">
+    👥 عدد الزوار: <strong id="visitors-count">٠</strong>
+  </div>
+
   <div class="cards-grid">
-    <div class="action-card" id="istighfar-card" onclick="addCount('istighfar')">
+    <!-- قراءة الفاتحة - كامل العرض -->
+    <div class="action-card full-width" id="fatiha-card" onclick="addCountFB('fatiha')">
+      <div class="pulse-ring" id="ring-fatiha"></div>
+      <span class="card-icon">📖</span>
+      <span class="card-label">قراءة الفاتحة</span>
+      <span class="card-count" id="fatiha-count">٠</span>
+      <span class="card-sub">مرة</span>
+    </div>
+    <div class="action-card" id="istighfar-card" onclick="addCountFB('istighfar')">
       <div class="pulse-ring" id="ring-istighfar"></div>
       <span class="card-icon">🤲</span>
       <span class="card-label">الاستغفار</span>
-      <span class="card-count" id="istighfar-count">0</span>
+      <span class="card-count" id="istighfar-count">٠</span>
       <span class="card-sub">مرة</span>
     </div>
-    <div class="action-card" id="salawat-card" onclick="addCount('salawat')">
+    <div class="action-card" id="salawat-card" onclick="addCountFB('salawat')">
       <div class="pulse-ring" id="ring-salawat"></div>
       <span class="card-icon">💚</span>
       <span class="card-label">الصلاة على النبي</span>
-      <span class="card-count" id="salawat-count">0</span>
+      <span class="card-count" id="salawat-count">٠</span>
       <span class="card-sub">مرة</span>
     </div>
-    <div class="action-card" id="tahlil-card" onclick="addCount('tahlil')">
+    <div class="action-card" id="tahlil-card" onclick="addCountFB('tahlil')">
       <div class="pulse-ring" id="ring-tahlil"></div>
       <span class="card-icon">☪️</span>
       <span class="card-label">التهليل</span>
-      <span class="card-count" id="tahlil-count">0</span>
+      <span class="card-count" id="tahlil-count">٠</span>
       <span class="card-sub">مرة</span>
     </div>
-    <div class="action-card" id="tasbih-card" onclick="addCount('tasbih')">
+    <div class="action-card" id="tasbih-card" onclick="addCountFB('tasbih')">
       <div class="pulse-ring" id="ring-tasbih"></div>
       <span class="card-icon">📿</span>
       <span class="card-label">التسبيح</span>
-      <span class="card-count" id="tasbih-count">0</span>
+      <span class="card-count" id="tasbih-count">٠</span>
       <span class="card-sub">مرة</span>
     </div>
   </div>
@@ -406,40 +505,16 @@
     <a class="quran-link" href="https://quran.com/2/255" target="_blank">📖 آية الكرسي</a>
   </div>
 
-  <button class="reset-btn" onclick="resetAll()">إعادة تعيين العداد</button>
+  <button class="reset-btn" onclick="resetAllFB()">إعادة تعيين العداد</button>
 </div>
 
 <script>
-  const keys = ['istighfar','salawat','tahlil','tasbih'];
-  const counts = {};
-
-  function load() {
-    keys.forEach(k => {
-      const val = parseInt(localStorage.getItem('memorial_' + k) || '0');
-      counts[k] = val;
-      document.getElementById(k + '-count').textContent = val.toLocaleString('ar-EG');
-    });
-    updateTotal();
-  }
-
-  function addCount(key) {
-    counts[key] = (counts[key] || 0) + 1;
-    localStorage.setItem('memorial_' + key, counts[key]);
-    document.getElementById(key + '-count').textContent = counts[key].toLocaleString('ar-EG');
-    updateTotal();
-    triggerPulse(key);
-  }
-
   function triggerPulse(key) {
     const ring = document.getElementById('ring-' + key);
+    if (!ring) return;
     ring.classList.remove('go');
     void ring.offsetWidth;
     ring.classList.add('go');
-  }
-
-  function updateTotal() {
-    const t = keys.reduce((s,k) => s + (counts[k]||0), 0);
-    document.getElementById('total-count').textContent = t.toLocaleString('ar-EG');
   }
 
   function copyDua() {
@@ -449,12 +524,6 @@
       btn.textContent = '✅ تم النسخ';
       setTimeout(() => btn.textContent = '📋 نسخ الدعاء', 2000);
     });
-  }
-
-  function resetAll() {
-    if (!confirm('هل تريد إعادة تعيين جميع العدادات؟')) return;
-    keys.forEach(k => { counts[k] = 0; localStorage.setItem('memorial_' + k, 0); document.getElementById(k + '-count').textContent = '0'; });
-    updateTotal();
   }
 
   function makeStars() {
@@ -471,5 +540,6 @@
   }
 
   makeStars();
-  load();
 </script>
+</body>
+</html>
