@@ -414,4 +414,76 @@
       <div class="pulse-ring" id="ring-salawat"></div>
       <span class="card-icon">💚</span>
       <span class="card-label">الصلاة على النبي</span>
-      <span class="card-count" id="salawat-count">
+      <span class="card-count" id="salawat-count">0</span>
+      <span class="card-sub">مرة</span>
+    </div>
+    <div class="action-card" id="tahlil-card" onclick="addCountFB('tahlil')">
+      <div class="pulse-ring" id="ring-tahlil"></div>
+      <span class="card-icon">☪️</span>
+      <span class="card-label">التهليل</span>
+      <span class="card-count" id="tahlil-count">0</span>
+      <span class="card-sub">مرة</span>
+    </div>
+    <div class="action-card" id="tasbih-card" onclick="addCountFB('tasbih')">
+      <div class="pulse-ring" id="ring-tasbih"></div>
+      <span class="card-icon">📿</span>
+      <span class="card-label">التسبيح</span>
+      <span class="card-count" id="tasbih-count">0</span>
+      <span class="card-sub">مرة</span>
+    </div>
+  </div>
+
+  <div class="total-banner">
+    مجموع الأذكار: <strong id="total-count">0</strong> مرة — جعلها الله في ميزان حسناته
+  </div>
+
+  <div class="dua-section">
+    <p class="dua-text">اللَّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ،<br>وَأَكْرِمْ نُزُلَهُ وَوَسِّعْ مُدْخَلَهُ،<br>وَاغْسِلْهُ بِالْمَاءِ وَالثَّلْجِ وَالْبَرَدِ</p>
+    <button class="copy-dua" onclick="copyDua()">📋 نسخ الدعاء</button>
+  </div>
+
+  <div class="links-row">
+    <a class="quran-link" href="https://quran.com/36" target="_blank">📖 سورة يس</a>
+    <a class="quran-link" href="https://quran.com/67" target="_blank">📖 سورة الملك</a>
+    <a class="quran-link" href="https://quran.com/2/255" target="_blank">📖 آية الكرسي</a>
+  </div>
+
+  <button class="reset-btn" onclick="resetAllFB()">إعادة تعيين العداد</button>
+</div>
+
+<script>
+  function triggerPulse(key) {
+    const ring = document.getElementById('ring-' + key);
+    if (!ring) return;
+    ring.classList.remove('go');
+    void ring.offsetWidth;
+    ring.classList.add('go');
+  }
+
+  function copyDua() {
+    const text = 'اللهم اغفر له وارحمه وعافه واعف عنه، وأكرم نزله ووسع مدخله، واغسله بالماء والثلج والبرد';
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-dua');
+      btn.textContent = '✅ تم النسخ';
+      setTimeout(() => btn.textContent = '📋 نسخ الدعاء', 2000);
+    });
+  }
+
+  function makeStars() {
+    const c = document.getElementById('stars');
+    if(!c) return;
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.top = Math.random() * 100 + '%';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.animationDelay = Math.random() * 3 + 's';
+      s.style.animationDuration = (2 + Math.random() * 3) + 's';
+      c.appendChild(s);
+    }
+  }
+
+  makeStars();
+</script>
+</body>
+</html>
