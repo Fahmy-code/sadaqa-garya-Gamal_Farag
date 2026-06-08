@@ -74,14 +74,6 @@
     triggerPulse(key);
   };
 
-  window.resetAllFB = function() {
-    if (!confirm('هل تريد إعادة تعيين جميع العدادات؟')) return;
-    const keys = ['fatiha','istighfar','salawat','tahlil','tasbih'];
-    const updates = {};
-    keys.forEach(k => updates['counters/' + k] = 0);
-    import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")
-      .then(({update}) => update(ref(db), updates));
-  };
 </script>
 
 <style>
@@ -546,7 +538,7 @@
     <a class="quran-link" href="https://quran.com/2/255" target="_blank">📖 آية الكرسي</a>
   </div>
 
-  <button class="reset-btn" onclick="resetAllFB()">إعادة تعيين العداد</button>
+  
 </div>
 
 <script>
